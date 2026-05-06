@@ -1,4 +1,4 @@
-The goal of the game is to be the Player with the most points when the game ends.
+    The goal of the game is to be the Player with the most points when the game ends.
 The game ends when there are no more cards left in either mixedDeck (there are two decks).
 Each player starts with 5 points. Points can increase and decrease as the game progresses.
 (Players cannot have negative points.)
