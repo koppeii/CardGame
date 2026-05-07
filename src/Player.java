@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Player {
     private String name;
     private ArrayList<Card> hand;
     private int numPoints;
     private boolean isFrozen;
+    private Map<String, Integer> statusEffects =  new HashMap<>();
 
     public Player(String name) {
         this.name = name;
