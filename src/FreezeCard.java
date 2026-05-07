@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 
-public class FreezeCard extends Card implements DealsDamage, AppliesFreeze {
+public class FreezeCard extends Card implements DealsDamage, ApplyStatus {
     private int damage; // amount of points subtracted from the target
+    private int tickDuration = 2;
 
     public FreezeCard() {
 
@@ -42,15 +43,14 @@ public class FreezeCard extends Card implements DealsDamage, AppliesFreeze {
             }
         }
 
-        freeze(currentPlayer, otherPlayer);
+        applyStatus(currentPlayer, otherPlayer, "Frozen", tickDuration, 0);
         doDamage(currentPlayer, otherPlayer);
-
     }
 
     @Override
-    public void freeze(Player currentPlayer, Player playerToFreeze) {
-        playerToFreeze.freeze();
-        System.out.println(currentPlayer.getName() + " froze " + playerToFreeze.getName() + "!");
+    public void applyStatus(Player effector, Player affected, String statusName, int ticks, int value) {
+        affected.addStatus(statusName, ticks, value);
+        System.out.println(effector.getName() + " froze " + affected.getName() + "!");
     }
 
     @Override

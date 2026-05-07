@@ -78,6 +78,9 @@ public class Game {
             }
             currentPlayer = players.get(currentPlayerIndex);
 
+            // advancetick for all players
+
+
             System.out.println("\n# cards remaining in Mixed deck: " + mixedDeck.size() + ".");
             System.out.println("# cards remaining in Damage deck: " + damageDeck.size() + ".\n");
 
@@ -88,7 +91,6 @@ public class Game {
             // check if the player should be skipped
             if (currentPlayer.isFrozen()) {
                 System.out.println(currentPlayer.getName() + " is frozen! Skipping turn.");
-                currentPlayer.unfreeze();
                 continue; // skips the rest of the body of the loop, and returns to the start of the loop
             }
 

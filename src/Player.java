@@ -1,16 +1,12 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Player {
     private String name;
     private ArrayList<Card> hand;
     private int numPoints;
     private boolean isFrozen;
-    private Map<String, Integer> statusEffects =  new HashMap<>();
+    private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
 
-    private int poisonTicks;
-    private int fireTicks;
 
     public Player(String name) {
         this.name = name;
@@ -43,10 +39,25 @@ public class Player {
             damageCard.doDamage(this, otherPlayer);
         }
 
-        // do possible additional freeze action
-        if (randomCard instanceof AppliesFreeze) {
-            AppliesFreeze freezeCard = (AppliesFreeze)randomCard;
-            freezeCard.freeze(this, otherPlayer);
+//        // do possible additional freeze action
+//        if (randomCard instanceof FreezeCard) {
+//            FreezeCard freezeCard = (FreezeCard)randomCard;
+//            freezeCard.applyStatus(this, otherPlayer);
+//        }
+    }
+
+    public void addStatus(String statusName, int tickDuration, int value) {
+        statusEffects.put(statusName, Arrays.asList(tickDuration, value));
+    }
+
+    public void advanceTick() {
+        for (Map.Entry<String, List<Integer>> entry : statusEffects.entrySet()) { // new syntax
+            int i = entry.getValue().get(0).intValue();
+
+            if (i == 1)
+                statusEffects.remove(entry.getKey());
+            else
+                addStatus(entry.getKey(), i - 1, entry.getValue().get(1).intValue());
         }
     }
 
@@ -60,14 +71,6 @@ public class Player {
 
     public boolean isFrozen() {
         return isFrozen;
-    }
-
-    public void freeze() {
-        isFrozen = true;
-    }
-
-    public void unfreeze() {
-        isFrozen = false;
     }
 
     public Card removeRandomCard() {
