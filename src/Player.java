@@ -6,6 +6,9 @@ public class Player {
     private int numPoints;
     private boolean isFrozen;
 
+    private int poisonTicks;
+    private int fireTicks;
+
     public Player(String name) {
         this.name = name;
         hand = new ArrayList<Card>();
@@ -98,6 +101,7 @@ public class Player {
         if (isFrozen) {
             System.out.println(" | *FROZEN*");
         }
+
         System.out.println(" | Cards in hand:");
         for (int i = 0; i < hand.size(); i++) {
             System.out.print(" | " + (i+1) + ": ");
