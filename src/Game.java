@@ -130,11 +130,11 @@ public class Game {
                     }
                 }
 
-                damageCard.doDamage(currentPlayer, otherPlayer);
-                if (damageCard instanceof AppliesFreeze) {
-                    AppliesFreeze freezeCard = (AppliesFreeze)damageCard;
-                    freezeCard.freeze(currentPlayer, otherPlayer);
-                }
+//                damageCard.doDamage(currentPlayer, otherPlayer);
+//                if (damageCard instanceof AppliesFreeze) {
+//                    AppliesFreeze freezeCard = (AppliesFreeze)damageCard;
+//                    freezeCard.freeze(currentPlayer, otherPlayer);
+//                }
             }
 
 //            Input.waitForUserToPressEnter("\nPress Enter to end " + currentPlayer.getName() + "'s turn.\n");

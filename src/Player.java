@@ -4,7 +4,6 @@ public class Player {
     private String name;
     private ArrayList<Card> hand;
     private int numPoints;
-    private boolean isFrozen;
     private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
 
 
@@ -12,7 +11,6 @@ public class Player {
         this.name = name;
         hand = new ArrayList<Card>();
         numPoints = 5;
-        isFrozen = false;
     }
 
     public void playRandomCardFromHand(ArrayList<Player> players) {
@@ -70,7 +68,9 @@ public class Player {
     }
 
     public boolean isFrozen() {
-        return isFrozen;
+        if (statusEffects.containsKey("Frozen"))
+            return true;
+        return false;
     }
 
     public Card removeRandomCard() {
@@ -104,7 +104,7 @@ public class Player {
     public void displayStatus() {
         System.out.println(" | ----- " + name + " ----- ");
         System.out.println(" | Points: " + numPoints);
-        if (isFrozen) {
+        if (isFrozen()) {
             System.out.println(" | *FROZEN*");
         }
 
