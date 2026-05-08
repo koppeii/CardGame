@@ -3,13 +3,13 @@ import java.util.*;
 public class Player {
     private final String name;
     private ArrayList<Card> hand;
-    private int numPoints;
+    private int health;
     private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
 
     public Player(String name) {
         this.name = name;
         hand = new ArrayList<Card>();
-        numPoints = 5;
+        health = 5;
     }
 
     public void playRandomCardFromHand(ArrayList<Player> players) {
@@ -83,24 +83,24 @@ public class Player {
         return name;
     }
 
-    public void addPoints(int pointsToAdd) {
-        numPoints += pointsToAdd;
+    public void addHealth(int healthToAdd) {
+        health += healthToAdd;
 
-        if (numPoints < 0)
-            numPoints = 0;
+        if (health < 0)
+            health = 0;
     }
 
-    public void removePoints(int pointsToRemove) {
-        addPoints(-pointsToRemove);
+    public void removePoints(int healthToRemove) {
+        addHealth(-healthToRemove);
     }
 
-    public int getNumPoints() {
-        return numPoints;
+    public int getHealth() {
+        return health;
     }
 
     public void displayStatus() {
         System.out.println(" | ----- " + name + " ----- ");
-        System.out.println(" | Points: " + numPoints);
+        System.out.println(" | Health: " + health);
 
         if (hasStatus("Frozen"))
             System.out.println(" | *FROZEN FOR " + getRemainingTicks("Frozen") + " TICK" + Helper.pluralSuffix(getRemainingTicks("Frozen")).toUpperCase());

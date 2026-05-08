@@ -22,7 +22,6 @@ public class Game {
 
     // -------- End of Settings ------- //
 
-
     // --------- Game Objects --------- //
 
     private ArrayList<Player> players;
@@ -221,11 +220,11 @@ public class Game {
         System.out.println("\nFinal Scoreboard:");
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
-            System.out.println(p.getName() + ": " + p.getNumPoints());
+            System.out.println(p.getName() + ": " + p.getHealth());
 
             // update highest score tracker
-            if (p.getNumPoints() >= highestScore) {
-                highestScore = p.getNumPoints();
+            if (p.getHealth() >= highestScore) {
+                highestScore = p.getHealth();
                 playerWithHighestScore = p;
             }
         }

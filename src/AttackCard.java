@@ -20,10 +20,10 @@ public class AttackCard extends Card implements DealsDamage {
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
-        currentPlayer.addPoints(super.getPointValue());
+        currentPlayer.addHealth(super.getPointValue());
 
         System.out.println(currentPlayer.getName() + " played " + this);
-        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getNumPoints() + " points.");
+        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " health.");
 
         // choose a target player (and not the current player)
         if (allPlayers.size() < 2) {
@@ -49,7 +49,7 @@ public class AttackCard extends Card implements DealsDamage {
     public void doDamage(Player currentPlayer, Player playerToDamage) {
         playerToDamage.removePoints(attackDamage);
         System.out.println("\n" + currentPlayer.getName() + " did " + attackDamage + " damage to " + playerToDamage.getName() + ".");
-        System.out.println(playerToDamage.getName() + " now has " + playerToDamage.getNumPoints() + " points.\n");
+        System.out.println(playerToDamage.getName() + " now has " + playerToDamage.getHealth() + " health.\n");
     }
 
     @Override

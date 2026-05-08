@@ -14,10 +14,10 @@ public class PointCard extends Card {
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
-        currentPlayer.addPoints(super.getPointValue());
+        currentPlayer.addHealth(super.getPointValue());
 
         System.out.println(currentPlayer.getName() + " played " + this);
-        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getNumPoints() + " points.");
+        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " health.");
     }
 
     @Override
