@@ -31,8 +31,6 @@ public class Game {
 
     // ------ End of Game Objects ----- //
 
-
-
     public Game() {
         // Set game settings
         setGameSettings();
@@ -54,6 +52,7 @@ public class Game {
 
         // deal cards to each player
         int cardsAdded = 0;
+
         while (cardsAdded < startingHandSize) {
             for (int i = 0; i < players.size(); i++) {
                 int randomCardIndex = Rand.randomInt(0, mixedDeck.size());
@@ -73,23 +72,19 @@ public class Game {
 
             // switch to next player
             currentPlayerIndex += 1;
-            if (currentPlayerIndex >= players.size()) {
+            if (currentPlayerIndex >= players.size())
                 currentPlayerIndex = 0;
-            }
+
             currentPlayer = players.get(currentPlayerIndex);
 
-            // advancetick for all players
-
-
-            System.out.println("\n# cards remaining in Mixed deck: " + mixedDeck.size() + ".");
-            System.out.println("# cards remaining in Damage deck: " + damageDeck.size() + ".\n");
+            for (Player player : players)
+                player.advanceTicks();
 
             System.out.println("It's " + currentPlayer.getName() + "'s turn.\n");
             currentPlayer.displayStatus();
-//            Input.waitForUserToPressEnter("\nPress Enter to play " + currentPlayer.getName() + "'s turn.");
 
             // check if the player should be skipped
-            if (currentPlayer.isFrozen()) {
+            if (currentPlayer.hasStatus("Frozen")) {
                 System.out.println(currentPlayer.getName() + " is frozen! Skipping turn.");
                 continue; // skips the rest of the body of the loop, and returns to the start of the loop
             }
@@ -129,15 +124,9 @@ public class Game {
                         selectedAnotherPlayer = true;
                     }
                 }
-
-//                damageCard.doDamage(currentPlayer, otherPlayer);
-//                if (damageCard instanceof AppliesFreeze) {
-//                    AppliesFreeze freezeCard = (AppliesFreeze)damageCard;
-//                    freezeCard.freeze(currentPlayer, otherPlayer);
-//                }
             }
-
-//            Input.waitForUserToPressEnter("\nPress Enter to end " + currentPlayer.getName() + "'s turn.\n");
+            System.out.println("\n# cards remaining in Mixed deck: " + mixedDeck.size() + ".");
+            System.out.println("# cards remaining in Damage deck: " + damageDeck.size() + ".\n");
         }
 
         // End game: determine which Player had the most points
@@ -168,6 +157,11 @@ public class Game {
         // Deck settings
         totalNumberOfCards = 20;
         chancesOfDamageCardBeingInDamageDeck = 0.4f;
+
+//        pointCardChances = 0f; // must be between 0 and 1
+//        attackCardChances = 0f; // must be between 0 and 1
+//        freezeCardChances = 1f; // must be between 0 and 1
+//        // test for freezeCards
 
         pointCardChances = 0.5f; // must be between 0 and 1
         attackCardChances = 0.25f; // must be between 0 and 1

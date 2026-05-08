@@ -1,11 +1,10 @@
 import java.util.*;
 
 public class Player {
-    private String name;
+    private final String name;
     private ArrayList<Card> hand;
     private int numPoints;
     private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
-
 
     public Player(String name) {
         this.name = name;
@@ -30,53 +29,51 @@ public class Player {
                 selectedAnotherPlayer = true;
             }
         }
-
-        // do possible additional damage action
-        if (randomCard instanceof DealsDamage) {
-            DealsDamage damageCard = (DealsDamage)randomCard;
-            damageCard.doDamage(this, otherPlayer);
-        }
-
-//        // do possible additional freeze action
-//        if (randomCard instanceof FreezeCard) {
-//            FreezeCard freezeCard = (FreezeCard)randomCard;
-//            freezeCard.applyStatus(this, otherPlayer);
-//        }
     }
 
     public void addStatus(String statusName, int tickDuration, int value) {
-        statusEffects.put(statusName, Arrays.asList(tickDuration, value));
+        statusEffects.put(statusName, Arrays.asList(tickDuration + 1, value));
     }
 
-    public void advanceTick() {
-        for (Map.Entry<String, List<Integer>> entry : statusEffects.entrySet()) { // new syntax
-            int i = entry.getValue().get(0).intValue();
+    public boolean hasStatus(String statusName) {
+        if (statusEffects.containsKey(statusName))
+            return true;
+        return false;
+    }
 
-            if (i == 1)
+    public void advanceTicks() {
+        for (Map.Entry<String, List<Integer>> entry : statusEffects.entrySet()) { // new syntax
+            int i = entry.getValue().getFirst();
+
+            if (i <= 1)
                 statusEffects.remove(entry.getKey());
             else
-                addStatus(entry.getKey(), i - 1, entry.getValue().get(1).intValue());
+                updateTick(entry.getKey(), i - 1);
         }
     }
 
+    private void updateTick(String statusName, int tickDuration) {
+        statusEffects.put(statusName, Arrays.asList(tickDuration, statusEffects.get(statusName).get(1)));
+    }
+
+    private int getRemainingTicks(String statusName) {
+        if (statusEffects.containsKey(statusName))
+            return statusEffects.get(statusName).getFirst();
+        else
+            return 0;
+    }
+
     public boolean hasCardsInHand() {
-        return hand.size() > 0;
+        return !hand.isEmpty();
     }
 
     public void addCardToHand(Card card) {
         hand.add(card);
     }
 
-    public boolean isFrozen() {
-        if (statusEffects.containsKey("Frozen"))
-            return true;
-        return false;
-    }
-
     public Card removeRandomCard() {
-        if (hand.size() == 0) {
+        if (hand.isEmpty())
             return null; // returning null indicates there are no cards to remove
-        }
 
         int randomCardIndex = Rand.randomInt(0, hand.size());
         return hand.remove(randomCardIndex); // ArrayList.remove both removes AND returns a reference to the object
@@ -88,9 +85,9 @@ public class Player {
 
     public void addPoints(int pointsToAdd) {
         numPoints += pointsToAdd;
-        if (numPoints < 0) {
+
+        if (numPoints < 0)
             numPoints = 0;
-        }
     }
 
     public void removePoints(int pointsToRemove) {
@@ -104,15 +101,16 @@ public class Player {
     public void displayStatus() {
         System.out.println(" | ----- " + name + " ----- ");
         System.out.println(" | Points: " + numPoints);
-        if (isFrozen()) {
-            System.out.println(" | *FROZEN*");
-        }
+
+        if (hasStatus("Frozen"))
+            System.out.println(" | *FROZEN FOR " + getRemainingTicks("Frozen") + " TICK" + Helper.pluralSuffix(getRemainingTicks("Frozen")).toUpperCase());
 
         System.out.println(" | Cards in hand:");
         for (int i = 0; i < hand.size(); i++) {
             System.out.print(" | " + (i+1) + ": ");
             System.out.println(hand.get(i));
         }
+
         System.out.println(" | ----- ----- ----- ");
     }
 }
