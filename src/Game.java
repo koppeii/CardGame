@@ -64,6 +64,10 @@ public class Game {
             Input.waitForUserToPressEnter(
                     "\nPress ENTER to end turn."
             );
+
+            for (Player player : players) {
+                player.advanceTicks();
+            }
         }
 
         // overtime

@@ -10,15 +10,17 @@ public class FreezeCard extends Card implements DealsDamage, ApplyStatus {
         int maxDamage = 6;
         this.damage = Rand.randomInt(minDamage, maxDamage + 1);
 
+
+        super(10);
     }
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
 
-        currentPlayer.addPoints(super.getPointValue());
+        currentPlayer.addHealth(super.getPointValue());
 
         System.out.println(currentPlayer.getName() + " played " + this);
-        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getNumPoints() + " points.");
+        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " points.");
 
         // choose a target player (and not the current player)
         if (allPlayers.size() < 2) {
@@ -50,9 +52,9 @@ public class FreezeCard extends Card implements DealsDamage, ApplyStatus {
 
     @Override
     public void doDamage(Player currentPlayer, Player playerToDamage) {
-        playerToDamage.removePoints(damage);
+        playerToDamage.takeDamage(damage);
         System.out.println(currentPlayer.getName() + " did " + damage + " damage to " + playerToDamage.getName() + ".");
-        System.out.println(playerToDamage.getName() + " now has " + playerToDamage.getNumPoints() + " points.\n");
+        System.out.println(playerToDamage.getName() + " now has " + playerToDamage.getHealth() + " points.\n");
     }
 
     @Override
