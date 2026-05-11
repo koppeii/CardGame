@@ -11,16 +11,14 @@ public class AttackCard extends Card implements DealsDamage {
         int maxAttackDamage = 8;
         this.attackDamage = Rand.randomInt(minAttackDamage, maxAttackDamage + 1);
 
-        // Points gained from playing this card
+        // no use, will cause problems
         int minPoints = 3;
         int maxPoints = 4;
         int pointValue = Rand.randomInt(minPoints, maxPoints + 1);
-        super(pointValue);
     }
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
-        currentPlayer.addHealth(super.getPointValue());
 
         System.out.println(currentPlayer.getName() + " played " + this);
         System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " health.");
@@ -54,6 +52,6 @@ public class AttackCard extends Card implements DealsDamage {
 
     @Override
     public String toString() {
-        return "Attack Card { point value: " + super.getPointValue() + ", damage: " + attackDamage + "}";
+        return "Attack Card { "+ ", damage: " + attackDamage + "}";
     }
 }

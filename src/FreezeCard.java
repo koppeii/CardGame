@@ -5,23 +5,16 @@ public class FreezeCard extends Card implements DealsDamage, ApplyStatus {
     private int tickDuration = 1;
 
     public FreezeCard() {
-
         // Card settings
         int minDamage = 4;
         int maxDamage = 6;
         this.damage = Rand.randomInt(minDamage, maxDamage + 1);
 
-        // Points gained from playing this card
-        int minPoints = 1;
-        int maxPoints = 2;
-        int pointValue = Rand.randomInt(minPoints, maxPoints + 1);
-
-        super(pointValue);
     }
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
-        currentPlayer.addHealth(super.getPointValue());
+
 
         System.out.println(currentPlayer.getName() + " played " + this);
         System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " health.");
@@ -63,6 +56,6 @@ public class FreezeCard extends Card implements DealsDamage, ApplyStatus {
 
     @Override
     public String toString() {
-        return "Freeze Card { point value: " + super.getPointValue() + ", damage: " + damage + "}";
+        return "Freeze Card { "+ ", damage: " + damage + "}";
     }
 }

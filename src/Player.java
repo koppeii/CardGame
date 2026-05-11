@@ -18,15 +18,11 @@ public class Player {
     public Player(String name) {
 
         this.name = name;
-
         hand = new ArrayList<Card>();
-
         deck = new ArrayList<Card>();
-
         // Starting values
         health = 100;
         shield = 100;
-
         isFrozen = false;
     }
 
@@ -35,15 +31,12 @@ public class Player {
     // -----------------------------
 
     public void playRandomCardFromHand(ArrayList<Player> players) {
-
         if (hand.size() == 0) {
             System.out.println(name + " has no cards!");
             return;
         }
-
         int randomCardIndex =
                 Rand.randomInt(0, hand.size());
-
         Card randomCard =
                 hand.remove(randomCardIndex);
 
@@ -68,19 +61,15 @@ public class Player {
 
         // damage effect
         if (randomCard instanceof DealsDamage) {
-
             DealsDamage damageCard =
                     (DealsDamage) randomCard;
-
             damageCard.doDamage(this, otherPlayer);
         }
 
         // freeze effect
         if (randomCard instanceof AppliesFreeze) {
-
             AppliesFreeze freezeCard =
                     (AppliesFreeze) randomCard;
-
             freezeCard.freeze(this, otherPlayer);
         }
     }

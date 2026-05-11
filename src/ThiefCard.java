@@ -4,14 +4,12 @@ public class ThiefCard extends Card {
 
     public ThiefCard() {
         // Thief card settings
-        int pointValue = -1; // costs 1 point to use
 
-        super(pointValue);
     }
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
-        currentPlayer.addHealth(super.getPointValue());
+
 
         System.out.println(currentPlayer.getName() + " played " + this);
         System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " health.");
@@ -50,6 +48,6 @@ public class ThiefCard extends Card {
 
     @Override
     public String toString() {
-        return "Thief Card { point value: " + super.getPointValue() + "}";
+        return "Thief Card { point value: " + "" + "}";
     }
 }
