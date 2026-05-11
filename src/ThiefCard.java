@@ -9,10 +9,14 @@ public class ThiefCard extends Card {
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
+<<<<<<< HEAD
 
+=======
+        currentPlayer.addPoints(super.getPointValue());
+>>>>>>> parent of 58c7b8a (health renaming)
 
         System.out.println(currentPlayer.getName() + " played " + this);
-        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " health.");
+        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getNumPoints() + " points.");
 
         // move a card from a target player to a new player
 

@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
+import java.util. LinkedHashMap;
+import java.util.Arrays;
 
 public class Player {
 
     private String name;
 
-    private ArrayList<Card> hand;
 
     // NEW: personal deck
     private ArrayList<Card> deck;
@@ -13,17 +16,16 @@ public class Player {
     private int health;
     private int shield;
 
-    private boolean isFrozen;
+    private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
 
     public Player(String name) {
 
         this.name = name;
-        hand = new ArrayList<Card>();
         deck = new ArrayList<Card>();
+
         // Starting values
         health = 100;
         shield = 100;
-        isFrozen = false;
     }
 
     // -----------------------------
@@ -31,14 +33,14 @@ public class Player {
     // -----------------------------
 
     public void playRandomCardFromHand(ArrayList<Player> players) {
-        if (hand.size() == 0) {
+        if (deck.size() == 0) {
             System.out.println(name + " has no cards!");
             return;
         }
         int randomCardIndex =
-                Rand.randomInt(0, hand.size());
+                Rand.randomInt(0, deck.size());
         Card randomCard =
-                hand.remove(randomCardIndex);
+                deck.remove(randomCardIndex);
 
         randomCard.play(this, players);
 
@@ -58,20 +60,6 @@ public class Player {
                 selectedAnotherPlayer = true;
             }
         }
-
-        // damage effect
-        if (randomCard instanceof DealsDamage) {
-            DealsDamage damageCard =
-                    (DealsDamage) randomCard;
-            damageCard.doDamage(this, otherPlayer);
-        }
-
-        // freeze effect
-        if (randomCard instanceof AppliesFreeze) {
-            AppliesFreeze freezeCard =
-                    (AppliesFreeze) randomCard;
-            freezeCard.freeze(this, otherPlayer);
-        }
     }
 
     // -----------------------------
@@ -80,24 +68,24 @@ public class Player {
 
     public boolean hasCardsInHand() {
 
-        return hand.size() > 0;
+        return deck.size() > 0;
     }
 
     public void addCardToHand(Card card) {
 
-        hand.add(card);
+        deck.add(card);
     }
 
     public Card removeRandomCard() {
 
-        if (hand.size() == 0) {
+        if (deck.size() == 0) {
             return null;
         }
 
         int randomCardIndex =
-                Rand.randomInt(0, hand.size());
+                Rand.randomInt(0, deck.size());
 
-        return hand.remove(randomCardIndex);
+        return deck.remove(randomCardIndex);
     }
 
     // -----------------------------
@@ -124,7 +112,7 @@ public class Player {
         Card drawnCard =
                 deck.remove(randomCardIndex);
 
-        hand.add(drawnCard);
+        deck.add(drawnCard);
 
         System.out.println(name
                 + " drew "
@@ -137,40 +125,54 @@ public class Player {
     }
 
     // -----------------------------
-    // FREEZE METHODS
+    // STATUS METHODS
     // -----------------------------
 
-    public boolean isFrozen() {
-
-        return isFrozen;
+    public void addStatus(String statusName, int tickDuration, int value) {
+        statusEffects.put(statusName, Arrays.asList(tickDuration + 1, value));
     }
 
-    public void freeze() {
-
-        isFrozen = true;
+    public boolean hasStatus(String statusName) {
+        if (statusEffects.containsKey(statusName))
+            return true;
+        return false;
     }
 
-    public void unfreeze() {
+    public void advanceTicks() {
+        for (Map.Entry<String, List<Integer>> entry : statusEffects.entrySet()) { // new syntax
+            int i = entry.getValue().getFirst();
 
-        isFrozen = false;
+            if (i <= 1)
+                statusEffects.remove(entry.getKey());
+            else
+                updateTick(entry.getKey(), i - 1);
+        }
     }
 
+    private void updateTick(String statusName, int tickDuration) {
+        statusEffects.put(statusName, Arrays.asList(tickDuration, statusEffects.get(statusName).get(1)));
+    }
+
+    private int getRemainingTicks(String statusName) {
+        if (statusEffects.containsKey(statusName))
+            return statusEffects.get(statusName).getFirst();
+        else
+            return 0;
+    }
+    
     // -----------------------------
     // GETTERS
     // -----------------------------
 
     public String getName() {
-
         return name;
     }
 
     public int getHealth() {
-
         return health;
     }
 
     public int getShield() {
-
         return shield;
     }
 
@@ -178,35 +180,28 @@ public class Player {
     // HEALTH / SHIELD
     // -----------------------------
 
-    public void heal(int amount) {
-
+    public void addHealth(int amount) {
         health += amount;
     }
 
     public void addShield(int amount) {
-
         shield += amount;
     }
 
     public void takeDamage(int damage) {
 
         // shield absorbs damage first
-        if (shield >= damage) {
-
+        if (shield >= damage)
             shield -= damage;
-        }
 
         else {
-
             damage -= shield;
-
             shield = 0;
 
             health -= damage;
 
-            if (health < 0) {
+            if (health < 0)
                 health = 0;
-            }
         }
     }
 
@@ -229,20 +224,20 @@ public class Player {
         System.out.println(" | Deck Size: "
                 + deck.size());
 
-        if (isFrozen) {
+        if (hasStatus("Frozen")) {
 
             System.out.println(" | *FROZEN*");
         }
 
         System.out.println(" | Cards in hand:");
 
-        for (int i = 0; i < hand.size(); i++) {
+        for (int i = 0; i < deck.size(); i++) {
 
             System.out.print(" | "
                     + (i + 1)
                     + ": ");
 
-            System.out.println(hand.get(i));
+            System.out.println(deck.get(i));
         }
 
         System.out.println(" | ----- ----- ----- ");

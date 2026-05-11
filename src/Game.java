@@ -4,7 +4,6 @@ public class Game {
 
     // settings
     private int startingHandSize;
-
     private int cardsPerDeck;
 
     // players
@@ -100,73 +99,13 @@ public class Game {
 
         for (int i = 0; i < players.size(); i++) {
 
-            Player currentPlayer = players.get(i);
+            Player p = players.get(i);
+            System.out.println(p.getName() + ": " + p.getNumPoints());
 
-            for (int j = 0; j < cardsPerDeck; j++) {
-
-                float randomValue = Rand.random();
-
-                // Point Card
-                if (randomValue < 0.4f) {
-
-                    currentPlayer.addCardToDeck(
-                            new PointCard()
-                    );
-                }
-
-                // Attack Card
-                else if (randomValue < 0.7f) {
-
-                    currentPlayer.addCardToDeck(
-                            new AttackCard()
-                    );
-                }
-
-                // Freeze Card
-                else if (randomValue < 0.9f) {
-
-                    currentPlayer.addCardToDeck(
-                            new FreezeCard()
-                    );
-                }
-
-                // Thief Card
-                else {
-
-                    currentPlayer.addCardToDeck(
-                            new ThiefCard()
-                    );
-                }
-            }
-        }
-    }
-
-    // ---------------------------------
-    // DEAL STARTING HANDS
-    // ---------------------------------
-
-    private void dealStartingHands() {
-
-        for (int i = 0; i < startingHandSize; i++) {
-
-            for (int j = 0; j < players.size(); j++) {
-
-                players.get(j).drawCard();
-            }
-        }
-    }
-
-    // ---------------------------------
-    // CHECK IF ALL DECKS EMPTY
-    // ---------------------------------
-
-    private boolean allDecksEmpty() {
-
-        for (int i = 0; i < players.size(); i++) {
-
-            if (players.get(i).getDeckSize() > 0) {
-
-                return false;
+            // update highest score tracker
+            if (p.getNumPoints() >= highestScore) {
+                highestScore = p.getNumPoints();
+                playerWithHighestScore = p;
             }
         }
 
