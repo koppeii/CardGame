@@ -8,7 +8,6 @@ public class Player {
 
     private String name;
 
-
     // NEW: personal deck
     private ArrayList<Card> deck;
 
@@ -19,7 +18,6 @@ public class Player {
     private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
 
     public Player(String name) {
-
         this.name = name;
         deck = new ArrayList<Card>();
 
@@ -33,7 +31,7 @@ public class Player {
     // -----------------------------
 
     public void playRandomCardFromHand(ArrayList<Player> players) {
-        if (deck.size() == 0) {
+        if (deck.isEmpty()) {
             System.out.println(name + " has no cards!");
             return;
         }

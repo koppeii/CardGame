@@ -9,7 +9,7 @@ public class PointCard extends Card {
         int maxPoints = 10;
 
         int pointValue = Rand.randomInt(minPoints, maxPoints + 1);
-
+        super(pointValue);
     }
 
     @Override

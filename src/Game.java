@@ -10,14 +10,12 @@ public class Game {
     private ArrayList<Player> players;
 
     public Game() {
-
         players = new ArrayList<Player>();
 
         setGameSettings();
     }
 
     public void registerPlayer(Player player) {
-
         players.add(player);
     }
 
@@ -44,24 +42,16 @@ public class Game {
                     players.get(currentPlayerIndex);
 
             System.out.println("\n======================");
-            System.out.println(currentPlayer.getName()
-                    + "'s TURN");
+            System.out.println(currentPlayer.getName() + "'s TURN");
             System.out.println("======================");
 
             currentPlayer.displayStatus();
 
-            Input.waitForUserToPressEnter(
-                    "\nPress ENTER to continue."
-            );
+            Input.waitForUserToPressEnter("\nPress ENTER to continue.");
 
             // frozen
-            if (currentPlayer.isFrozen()) {
-
-                System.out.println(currentPlayer.getName()
-                        + " is frozen!");
-
-                currentPlayer.unfreeze();
-
+            if (currentPlayer.hasStatus("Frozen")) {
+                System.out.println(currentPlayer.getName() + " is frozen!");
                 continue;
             }
 
@@ -97,16 +87,77 @@ public class Game {
 
     private void generatePlayerDecks() {
 
+
+
         for (int i = 0; i < players.size(); i++) {
+            Player currentPlayer = players.get(i);
 
-            Player p = players.get(i);
-            System.out.println(p.getName() + ": " + p.getNumPoints());
+            for (int j = 0; j < cardsPerDeck; j++) {
 
-            // update highest score tracker
-            if (p.getNumPoints() >= highestScore) {
-                highestScore = p.getNumPoints();
-                playerWithHighestScore = p;
+                float randomValue = Rand.random();
+
+                // Point Card
+                if (randomValue < 0.4f) {
+                    currentPlayer.addCardToDeck(
+                            new PointCard()
+                    );
+                }
+
+                // Attack Card
+                else if (randomValue < 0.7f) {
+
+                    currentPlayer.addCardToDeck(
+                            new AttackCard()
+                    );
+                }
+
+
+                // Freeze Card
+                else if (randomValue < 0.9f) {
+
+
+                    currentPlayer.addCardToDeck(
+                            new FreezeCard()
+                    );
+
+                }
+
+                // Thief Card
+                else {
+
+                    currentPlayer.addCardToDeck(
+                            new ThiefCard()
+                    );
+                }
             }
+        }
+    }
+
+    // ---------------------------------
+    // DEAL STARTING HANDS
+    // ---------------------------------
+
+    private void dealStartingHands() {
+
+        for (int i = 0; i < startingHandSize; i++) {
+
+            for (int j = 0; j < players.size(); j++) {
+
+                players.get(j).drawCard();
+            }
+        }
+    }
+
+
+    // ---------------------------------
+    // CHECK IF ALL DECKS EMPTY
+    // ---------------------------------
+
+    private boolean allDecksEmpty() {
+
+        for (Player player : players) {
+            if (player.getDeckSize() > 0)
+                return false;
         }
 
         return true;
