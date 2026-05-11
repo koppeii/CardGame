@@ -1,113 +1,258 @@
-import java.util.*;
+import java.util.ArrayList;
 
 public class Player {
-    private final String name;
+
+    private String name;
+
     private ArrayList<Card> hand;
+
+    // NEW: personal deck
+    private ArrayList<Card> deck;
+
+    // Stats
     private int health;
-    private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
+    private int shield;
+
+    private boolean isFrozen;
 
     public Player(String name) {
+
         this.name = name;
+
         hand = new ArrayList<Card>();
-        health = 5;
+
+        deck = new ArrayList<Card>();
+
+        // Starting values
+        health = 100;
+        shield = 100;
+
+        isFrozen = false;
     }
 
+    // -----------------------------
+    // CARD PLAYING
+    // -----------------------------
+
     public void playRandomCardFromHand(ArrayList<Player> players) {
-        // select a random card from our hand to play
-        int randomCardIndex = Rand.randomInt(0, hand.size());
-        Card randomCard = hand.remove(randomCardIndex);
+
+        if (hand.size() == 0) {
+            System.out.println(name + " has no cards!");
+            return;
+        }
+
+        int randomCardIndex =
+                Rand.randomInt(0, hand.size());
+
+        Card randomCard =
+                hand.remove(randomCardIndex);
+
         randomCard.play(this, players);
 
-        // pick a random player (but not oneself) to apply any additional actions to
+        // choose another player
         boolean selectedAnotherPlayer = false;
+
         Player otherPlayer = null;
 
         while (!selectedAnotherPlayer) {
-            int randomPlayerIndex = Rand.randomInt(0, players.size());
+
+            int randomPlayerIndex =
+                    Rand.randomInt(0, players.size());
+
             otherPlayer = players.get(randomPlayerIndex);
+
             if (otherPlayer != this) {
                 selectedAnotherPlayer = true;
             }
         }
-    }
 
-    public void addStatus(String statusName, int tickDuration, int value) {
-        statusEffects.put(statusName, Arrays.asList(tickDuration + 1, value));
-    }
+        // damage effect
+        if (randomCard instanceof DealsDamage) {
 
-    public boolean hasStatus(String statusName) {
-        if (statusEffects.containsKey(statusName))
-            return true;
-        return false;
-    }
+            DealsDamage damageCard =
+                    (DealsDamage) randomCard;
 
-    public void advanceTicks() {
-        for (Map.Entry<String, List<Integer>> entry : statusEffects.entrySet()) { // new syntax
-            int i = entry.getValue().getFirst();
+            damageCard.doDamage(this, otherPlayer);
+        }
 
-            if (i <= 1)
-                statusEffects.remove(entry.getKey());
-            else
-                updateTick(entry.getKey(), i - 1);
+        // freeze effect
+        if (randomCard instanceof AppliesFreeze) {
+
+            AppliesFreeze freezeCard =
+                    (AppliesFreeze) randomCard;
+
+            freezeCard.freeze(this, otherPlayer);
         }
     }
 
-    private void updateTick(String statusName, int tickDuration) {
-        statusEffects.put(statusName, Arrays.asList(tickDuration, statusEffects.get(statusName).get(1)));
-    }
-
-    private int getRemainingTicks(String statusName) {
-        if (statusEffects.containsKey(statusName))
-            return statusEffects.get(statusName).getFirst();
-        else
-            return 0;
-    }
+    // -----------------------------
+    // HAND METHODS
+    // -----------------------------
 
     public boolean hasCardsInHand() {
-        return !hand.isEmpty();
+
+        return hand.size() > 0;
     }
 
     public void addCardToHand(Card card) {
+
         hand.add(card);
     }
 
     public Card removeRandomCard() {
-        if (hand.isEmpty())
-            return null; // returning null indicates there are no cards to remove
 
-        int randomCardIndex = Rand.randomInt(0, hand.size());
-        return hand.remove(randomCardIndex); // ArrayList.remove both removes AND returns a reference to the object
+        if (hand.size() == 0) {
+            return null;
+        }
+
+        int randomCardIndex =
+                Rand.randomInt(0, hand.size());
+
+        return hand.remove(randomCardIndex);
     }
 
+    // -----------------------------
+    // DECK METHODS
+    // -----------------------------
+
+    public void addCardToDeck(Card card) {
+
+        deck.add(card);
+    }
+
+    public void drawCard() {
+
+        if (deck.size() == 0) {
+
+            System.out.println(name + "'s deck is empty!");
+
+            return;
+        }
+
+        int randomCardIndex =
+                Rand.randomInt(0, deck.size());
+
+        Card drawnCard =
+                deck.remove(randomCardIndex);
+
+        hand.add(drawnCard);
+
+        System.out.println(name
+                + " drew "
+                + drawnCard);
+    }
+
+    public int getDeckSize() {
+
+        return deck.size();
+    }
+
+    // -----------------------------
+    // FREEZE METHODS
+    // -----------------------------
+
+    public boolean isFrozen() {
+
+        return isFrozen;
+    }
+
+    public void freeze() {
+
+        isFrozen = true;
+    }
+
+    public void unfreeze() {
+
+        isFrozen = false;
+    }
+
+    // -----------------------------
+    // GETTERS
+    // -----------------------------
+
     public String getName() {
+
         return name;
     }
 
-    public void addHealth(int healthToAdd) {
-        health += healthToAdd;
-
-        if (health < 0)
-            health = 0;
-    }
-
-    public void removePoints(int healthToRemove) {
-        addHealth(-healthToRemove);
-    }
-
     public int getHealth() {
+
         return health;
     }
 
-    public void displayStatus() {
-        System.out.println(" | ----- " + name + " ----- ");
-        System.out.println(" | Health: " + health);
+    public int getShield() {
 
-        if (hasStatus("Frozen"))
-            System.out.println(" | *FROZEN FOR " + getRemainingTicks("Frozen") + " TICK" + Helper.pluralSuffix(getRemainingTicks("Frozen")).toUpperCase());
+        return shield;
+    }
+
+    // -----------------------------
+    // HEALTH / SHIELD
+    // -----------------------------
+
+    public void heal(int amount) {
+
+        health += amount;
+    }
+
+    public void addShield(int amount) {
+
+        shield += amount;
+    }
+
+    public void takeDamage(int damage) {
+
+        // shield absorbs damage first
+        if (shield >= damage) {
+
+            shield -= damage;
+        }
+
+        else {
+
+            damage -= shield;
+
+            shield = 0;
+
+            health -= damage;
+
+            if (health < 0) {
+                health = 0;
+            }
+        }
+    }
+
+    // -----------------------------
+    // DISPLAY
+    // -----------------------------
+
+    public void displayStatus() {
+
+        System.out.println(" | ----- "
+                + name
+                + " ----- ");
+
+        System.out.println(" | Health: "
+                + health);
+
+        System.out.println(" | Shield: "
+                + shield);
+
+        System.out.println(" | Deck Size: "
+                + deck.size());
+
+        if (isFrozen) {
+
+            System.out.println(" | *FROZEN*");
+        }
 
         System.out.println(" | Cards in hand:");
+
         for (int i = 0; i < hand.size(); i++) {
-            System.out.print(" | " + (i+1) + ": ");
+
+            System.out.print(" | "
+                    + (i + 1)
+                    + ": ");
+
             System.out.println(hand.get(i));
         }
 
