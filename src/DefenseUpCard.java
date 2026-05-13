@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-public class DefenseCard extends Card implements ApplyStatus{
+public class DefenseUpCard extends Card implements ApplyStatus{
     private int tick = 2;
     private int value = 2;
 
-
+    DefenseUpCard() {super(20);}
 
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
@@ -14,7 +14,7 @@ public class DefenseCard extends Card implements ApplyStatus{
 
 
 
-        applyStatus(currentPlayer, currentPlayer, "Defense", allPlayers.size()*tick, value);
+        applyStatus(currentPlayer, currentPlayer, "DefenseUp", allPlayers.size()*tick, value);
 
     }
     @Override
@@ -23,15 +23,4 @@ public class DefenseCard extends Card implements ApplyStatus{
 
         System.out.println(effector.getName() + " froze " + affected.getName() + " for " + ticks + " tick" + Helper.pluralSuffix(ticks) + "!");
     }
-
-
-
-
-
-
-
-
-
-
-    DefenseCard() {super(20);}
 }

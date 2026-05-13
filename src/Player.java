@@ -23,7 +23,6 @@ public class Player {
 
         deck = new ArrayList<>();
 
-
         // Starting values
         health = 100;
         shield = 100;
@@ -249,27 +248,22 @@ public class Player {
     public void takeDamage(int damage) {
 
         //checks if player has defense status effect
-        if (hasStatus("Defense")) {
-            damage = damage/getValueOfStatus("Defense");
-        }
-        // shield absorbs damage first
-        if (shield >= damage) {
+        if (hasStatus("DefenseUp"))
+            damage /= getValueOfStatus("DefenseUp");
 
+        // shield absorbs damage first
+        if (shield >= damage)
             shield -= damage;
-        }
+
 
         else {
-
             damage -= shield;
-
             shield = 0;
 
             health -= damage;
 
-            if (health < 0) {
-
+            if (health < 0)
                 health = 0;
-            }
         }
     }
 
