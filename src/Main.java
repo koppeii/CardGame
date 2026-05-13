@@ -1,13 +1,31 @@
 public class Main {
     public static void main(String[] args) {
-        Player p1 = new Player("Aang");
-        Player p2 = new Player("SpongeBob");
-        Player p3 = new Player("Michelangelo");
+        System.out.println("The Card Game Elemental Expansion");
+        System.out.println("---------------------------------");
+
+        // Gamemode selection
+        System.out.println("Choose Game Mode:");
+        System.out.println("1. Auto Mode (AI vs AI vs AI)");
+        System.out.println("2. Player vs AI (Player vs 2 AI)");
+
+        int mode = Input.getMenuChoice("Enter choice (1-2): ", 1, 2);
 
         Game game = new Game();
-        game.registerPlayer(p1);
-        game.registerPlayer(p2);
-        game.registerPlayer(p3);
+
+        if (mode == 1) {
+            // Auto mode
+            game.registerPlayer(new Player("Aang (AI)"));
+            game.registerPlayer(new Player("SpongeBob (AI)"));
+            game.registerPlayer(new Player("Michelangelo (AI)"));
+        } else {
+            // Human vs AI mode
+            String userName = Input.getUserString("Enter your name: ");
+
+            game.registerPlayer(new Player(userName + " (Player)"));
+            game.registerPlayer(new Player("SpongeBob (AI)"));
+            game.registerPlayer(new Player("Michelangelo (AI)"));
+        }
+
 
         game.run();
     }
