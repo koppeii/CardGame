@@ -21,7 +21,8 @@ public class Player {
 
         this.name = name;
 
-        deck = new ArrayList<Card>();
+        deck = new ArrayList<>();
+
 
         // Starting values
         health = 100;
@@ -127,7 +128,6 @@ public class Player {
     }
 
     public int getDeckSize() {
-
         return deck.size();
     }
 
@@ -204,6 +204,14 @@ public class Player {
             return 0;
         }
     }
+
+    private int getValueOfStatus(String statusName) {
+        if (!statusEffects.containsKey(statusName))
+            return 0;
+        else
+            return statusEffects.get(statusName).get(1);
+    }
+    
 
     // -----------------------------
     // GETTERS
