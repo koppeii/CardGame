@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
-public class HealthCard extends Card {
+public class ShieldCard extends Card {
 
-    public HealthCard() {
+    public ShieldCard() {
 
         super(Rand.randomInt(10, 40));
     }
@@ -11,7 +11,7 @@ public class HealthCard extends Card {
     public void play(Player currentPlayer,
                      ArrayList<Player> allPlayers) {
 
-        currentPlayer.heal(super.getPointValue());
+        currentPlayer.addShield(super.getPointValue());
 
         System.out.println(
                 currentPlayer.getName()
@@ -22,15 +22,15 @@ public class HealthCard extends Card {
         System.out.println(
                 currentPlayer.getName()
                         + " now has "
-                        + currentPlayer.getHealth()
-                        + " health."
+                        + currentPlayer.getShield()
+                        + " shield."
         );
     }
 
     @Override
     public String toString() {
 
-        return "Health Card { heal: "
+        return "Shield Card { shield: "
                 + super.getPointValue()
                 + " }";
     }

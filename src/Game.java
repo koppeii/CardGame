@@ -91,8 +91,6 @@ public class Game {
 
     private void generatePlayerDecks() {
 
-
-
         for (int i = 0; i < players.size(); i++) {
             Player currentPlayer = players.get(i);
 
@@ -100,7 +98,7 @@ public class Game {
 
                 float randomValue = Rand.random();
 
-                // Point Card
+                // Health Card
                 if (randomValue < 0.4f) {
                     currentPlayer.addCardToDeck(
                             new HealthCard()
@@ -115,10 +113,8 @@ public class Game {
                     );
                 }
 
-
                 // Freeze Card
                 else if (randomValue < 0.9f) {
-
 
                     currentPlayer.addCardToDeck(
                             new FreezeCard()
@@ -127,10 +123,18 @@ public class Game {
                 }
 
                 // Thief Card
-                else {
+                else if (randomValue < 0.95f) {
 
                     currentPlayer.addCardToDeck(
                             new ThiefCard()
+                    );
+                }
+
+                // Shield Card
+                else {
+
+                    currentPlayer.addCardToDeck(
+                            new ShieldCard()
                     );
                 }
             }
@@ -151,7 +155,6 @@ public class Game {
             }
         }
     }
-
 
     // ---------------------------------
     // CHECK IF ALL DECKS EMPTY
