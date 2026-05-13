@@ -246,6 +246,10 @@ public class Player {
 
     public void takeDamage(int damage) {
 
+        //checks if player has defense status effect
+        if (hasStatus("Defense")) {
+            
+        }
         // shield absorbs damage first
         if (shield >= damage) {
 
