@@ -181,35 +181,29 @@ public class Player {
     }
 
     private void updateTick(String statusName,
-                            int tickDuration) {
+                            int newTick) {
 
         statusEffects.put(
                 statusName,
                 Arrays.asList(
-                        tickDuration,
+                        newTick,
                         statusEffects.get(statusName).get(1)
                 )
         );
     }
 
-    private int getRemainingTicks(String statusName) {
-
-        if (statusEffects.containsKey(statusName)) {
-
-            return statusEffects.get(statusName).get(0);
-        }
-
-        else {
-
+    private int getTicksOfStatus(String statusName) {
+        if (!hasStatus(statusName))
             return 0;
-        }
+
+        return statusEffects.get(statusName).get(0);
     }
 
     private int getValueOfStatus(String statusName) {
-        if (!statusEffects.containsKey(statusName))
+        if (!hasStatus(statusName))
             return 0;
-        else
-            return statusEffects.get(statusName).get(1);
+
+        return statusEffects.get(statusName).get(1);
     }
     
 
