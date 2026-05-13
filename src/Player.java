@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
-import java.util. LinkedHashMap;
+import java.util.LinkedHashMap;
 import java.util.Arrays;
 
 public class Player {
@@ -15,10 +15,12 @@ public class Player {
     private int health;
     private int shield;
 
-    private Map<String, List<Integer>> statusEffects =  new LinkedHashMap<>();
+    private Map<String, List<Integer>> statusEffects = new LinkedHashMap<>();
 
     public Player(String name) {
+
         this.name = name;
+
         deck = new ArrayList<Card>();
 
         // Starting values
@@ -31,12 +33,17 @@ public class Player {
     // -----------------------------
 
     public void playRandomCardFromHand(ArrayList<Player> players) {
+
         if (deck.isEmpty()) {
+
             System.out.println(name + " has no cards!");
+
             return;
         }
+
         int randomCardIndex =
                 Rand.randomInt(0, deck.size());
+
         Card randomCard =
                 deck.remove(randomCardIndex);
 
@@ -55,6 +62,7 @@ public class Player {
             otherPlayer = players.get(randomPlayerIndex);
 
             if (otherPlayer != this) {
+
                 selectedAnotherPlayer = true;
             }
         }
@@ -77,6 +85,7 @@ public class Player {
     public Card removeRandomCard() {
 
         if (deck.size() == 0) {
+
             return null;
         }
 
@@ -126,51 +135,92 @@ public class Player {
     // STATUS METHODS
     // -----------------------------
 
-    public void addStatus(String statusName, int tickDuration, int value) {
-        statusEffects.put(statusName, Arrays.asList(tickDuration + 1, value));
+    public void addStatus(String statusName,
+                          int tickDuration,
+                          int value) {
+
+        statusEffects.put(
+                statusName,
+                Arrays.asList(tickDuration + 1, value)
+        );
     }
 
     public boolean hasStatus(String statusName) {
-        if (statusEffects.containsKey(statusName))
-            return true;
-        return false;
+
+        return statusEffects.containsKey(statusName);
     }
 
     public void advanceTicks() {
-        for (Map.Entry<String, List<Integer>> entry : statusEffects.entrySet()) { // new syntax
-            int i = entry.getValue().getFirst();
 
-            if (i <= 1)
-                statusEffects.remove(entry.getKey());
-            else
-                updateTick(entry.getKey(), i - 1);
+        ArrayList<String> statusesToRemove =
+                new ArrayList<String>();
+
+        for (Map.Entry<String, List<Integer>> entry
+                : statusEffects.entrySet()) {
+
+            int ticksLeft = entry.getValue().get(0);
+
+            if (ticksLeft <= 1) {
+
+                statusesToRemove.add(entry.getKey());
+            }
+
+            else {
+
+                updateTick(
+                        entry.getKey(),
+                        ticksLeft - 1
+                );
+            }
+        }
+
+        for (int i = 0; i < statusesToRemove.size(); i++) {
+
+            statusEffects.remove(statusesToRemove.get(i));
         }
     }
 
-    private void updateTick(String statusName, int tickDuration) {
-        statusEffects.put(statusName, Arrays.asList(tickDuration, statusEffects.get(statusName).get(1)));
+    private void updateTick(String statusName,
+                            int tickDuration) {
+
+        statusEffects.put(
+                statusName,
+                Arrays.asList(
+                        tickDuration,
+                        statusEffects.get(statusName).get(1)
+                )
+        );
     }
 
     private int getRemainingTicks(String statusName) {
-        if (statusEffects.containsKey(statusName))
-            return statusEffects.get(statusName).getFirst();
-        else
+
+        if (statusEffects.containsKey(statusName)) {
+
+            return statusEffects.get(statusName).get(0);
+        }
+
+        else {
+
             return 0;
+        }
     }
-    
+
     // -----------------------------
     // GETTERS
     // -----------------------------
 
     public String getName() {
+
         return name;
     }
 
     public int getHealth() {
+
         return health;
     }
 
     public int getShield() {
+
         return shield;
     }
 
@@ -178,28 +228,42 @@ public class Player {
     // HEALTH / SHIELD
     // -----------------------------
 
+    // NEW HEAL METHOD
+    public void heal(int amount) {
+
+        health += amount;
+    }
+
     public void addHealth(int amount) {
+
         health += amount;
     }
 
     public void addShield(int amount) {
+
         shield += amount;
     }
 
     public void takeDamage(int damage) {
 
         // shield absorbs damage first
-        if (shield >= damage)
+        if (shield >= damage) {
+
             shield -= damage;
+        }
 
         else {
+
             damage -= shield;
+
             shield = 0;
 
             health -= damage;
 
-            if (health < 0)
+            if (health < 0) {
+
                 health = 0;
+            }
         }
     }
 
