@@ -103,7 +103,7 @@ public class Game {
                 // Point Card
                 if (randomValue < 0.4f) {
                     currentPlayer.addCardToDeck(
-                            new PointCard()
+                            new HealthCard()
                     );
                 }
 
