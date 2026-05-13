@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class DefenseCard extends Card implements ApplyStatus{
     private int tick = 2;
-    private int value = 5;
+    private int value = 2;
 
 
 

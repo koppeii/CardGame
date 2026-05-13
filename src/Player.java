@@ -256,7 +256,7 @@ public class Player {
 
         //checks if player has defense status effect
         if (hasStatus("Defense")) {
-            
+            damage = damage/getValueOfStatus("Defense");
         }
         // shield absorbs damage first
         if (shield >= damage) {
