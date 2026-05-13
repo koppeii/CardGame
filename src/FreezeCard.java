@@ -17,8 +17,6 @@ public class FreezeCard extends Card implements DealsDamage, ApplyStatus {
     @Override
     public void play(Player currentPlayer, ArrayList<Player> allPlayers) {
 
-        currentPlayer.addHealth(super.getPointValue());
-
         System.out.println(currentPlayer.getName() + " played " + this);
         System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getHealth() + " points.");
 

@@ -258,6 +258,7 @@ public class Player {
         if (hasStatus("Defense")) {
             damage = damage/getValueOfStatus("Defense");
         }
+
         // shield absorbs damage first
         if (shield >= damage) {
 
